@@ -11,7 +11,7 @@ JSON.parse(
 let currentCategoryId = null;
 
 // ======================
-// SAVE DATA
+// SAVE
 // ======================
 
 function saveData(){
@@ -260,9 +260,9 @@ function renderFiles(){
             </h3>
 
             <button
-                onclick="openFile(${file.id})"
+                onclick="downloadFile(${file.id})"
             >
-                Open
+                Download/Open
             </button>
 
             <button
@@ -285,10 +285,10 @@ function renderFiles(){
 }
 
 // ======================
-// OPEN FILE
+// DOWNLOAD FILE
 // ======================
 
-function openFile(id){
+function downloadFile(id){
 
     let category =
     categories.find(
@@ -301,18 +301,14 @@ function openFile(id){
         file=>file.id===id
     );
 
-    fetch(file.data)
-    .then(response=>response.blob())
-    .then(blob=>{
+    let link =
+    document.createElement("a");
 
-        let blobURL =
-        URL.createObjectURL(blob);
+    link.href = file.data;
 
-        window.open(
-            blobURL,
-            "_blank"
-        );
-    });
+    link.download = file.name;
+
+    link.click();
 }
 
 // ======================

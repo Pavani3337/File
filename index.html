@@ -3,74 +3,71 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<title>Document Organizer</title>
 
-    <title>Document Organizer</title>
-
-    <link rel="stylesheet"
-          href="style.css">
+<link rel="stylesheet"
+      href="style.css">
 
 </head>
 
 <body>
 
-    <!-- HOME PAGE -->
-    <div id="homePage">
+<!-- HOME -->
+<div id="homePage">
 
-        <h1>🗂 Document Organizer</h1>
+    <h1>🗂 Document Organizer</h1>
 
-        <div class="topBox">
+    <div class="topBox">
 
-            <input type="text"
-                   id="categoryInput"
-                   placeholder="Enter Category Name">
+        <input type="text"
+               id="categoryInput"
+               placeholder="Enter Category">
 
-            <button id="addCategoryBtn">
-                Add Category
-            </button>
-
-        </div>
-
-        <div id="categoriesContainer"></div>
-
-    </div>
-
-    <!-- DASHBOARD -->
-    <div id="dashboardPage">
-
-        <button id="backBtn">
-            ⬅ Back
+        <button id="addCategoryBtn">
+            Add Category
         </button>
 
-        <h1 id="dashboardTitle"></h1>
+    </div>
 
-        <!-- FILE UPLOAD -->
-        <div class="section">
+    <div id="categoriesContainer"></div>
 
-            <input type="file"
-                   id="fileInput">
+</div>
 
-            <button id="uploadBtn">
-                Upload File
-            </button>
+<!-- DASHBOARD -->
+<div id="dashboardPage">
 
-        </div>
+    <button id="backBtn">
+        ⬅ Back
+    </button>
 
-        <!-- FILES -->
-        <div class="section">
+    <h1 id="dashboardTitle"></h1>
 
-            <h2>📄 Files</h2>
+    <div class="section">
 
-            <div id="filesContainer"></div>
+        <input type="file"
+               id="fileInput">
 
-        </div>
+        <button id="uploadBtn">
+            Upload File
+        </button>
 
     </div>
 
-    <script src="script.js"></script>
+    <div class="section">
+
+        <h2>📄 Files</h2>
+
+        <div id="filesContainer"></div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
