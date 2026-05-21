@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Document Organizer</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- HOME PAGE -->
+<div id="homePage">
+
+    <h1>🗂 Document Organizer</h1>
+
+    <div class="topBox">
+
+        <input
+            type="text"
+            id="categoryInput"
+            placeholder="Enter Category Name"
+        >
+
+        <button id="addCategoryBtn">
+            Add Category
+        </button>
+
+    </div>
+
+    <div id="categoriesContainer"></div>
+
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboardPage">
+
+    <button id="backBtn">
+        ⬅ Back
+    </button>
+
+    <h1 id="dashboardTitle"></h1>
+
+    <!-- FILE UPLOAD -->
+    <div class="section">
+
+        <input
+            type="file"
+            id="fileInput"
+        >
+
+        <button id="uploadBtn">
+            Upload File
+        </button>
+
+    </div>
+
+    <!-- FILES -->
+    <div class="section">
+
+        <h2>📄 Files</h2>
+
+        <div id="filesContainer"></div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
