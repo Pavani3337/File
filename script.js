@@ -9,7 +9,7 @@ JSON.parse(localStorage.getItem("categories"))
 let currentCategoryId = null;
 
 // ======================
-// SAVE DATA
+// SAVE
 // ======================
 
 function saveData(){
@@ -145,7 +145,7 @@ function openCategory(id){
 }
 
 // ======================
-// BACK BUTTON
+// BACK
 // ======================
 
 document.getElementById(
@@ -182,31 +182,38 @@ document.getElementById(
     let file =
     fileInput.files[0];
 
-    let fileURL =
-    URL.createObjectURL(file);
+    let reader =
+    new FileReader();
 
-    let category =
-    categories.find(
-        category=>
-        category.id===currentCategoryId
-    );
+    reader.onload = function(e){
 
-    category.files.push({
+        let category =
+        categories.find(
+            category=>
+            category.id===currentCategoryId
+        );
 
-        id:Date.now(),
+        category.files.push({
 
-        name:file.name,
+            id:Date.now(),
 
-        url:fileURL,
+            name:file.name,
 
-        favorite:false
-    });
+            data:e.target.result,
+
+            type:file.type,
+
+            favorite:false
+        });
+
+        saveData();
+
+        renderFiles();
+    };
+
+    reader.readAsDataURL(file);
 
     fileInput.value="";
-
-    saveData();
-
-    renderFiles();
 };
 
 // ======================
@@ -231,7 +238,6 @@ function renderFiles(){
     let files =
     [...category.files];
 
-    // FAVORITES FIRST
     files.sort((a,b)=>
         b.favorite-a.favorite
     );
@@ -249,20 +255,15 @@ function renderFiles(){
 
                 ${file.favorite ? "⭐":""}
 
-                <a
-                    href="${file.url}"
-                    target="_blank"
-                    style="
-                        color:white;
-                        text-decoration:none;
-                    "
-                >
-
-                    📄 ${file.name}
-
-                </a>
+                📄 ${file.name}
 
             </h3>
+
+            <button
+                onclick="openFile(${file.id})"
+            >
+                Open
+            </button>
 
             <button
                 onclick="toggleFavorite(${file.id})"
@@ -281,6 +282,26 @@ function renderFiles(){
         </div>
         `;
     });
+}
+
+// ======================
+// OPEN FILE
+// ======================
+
+function openFile(id){
+
+    let category =
+    categories.find(
+        category=>
+        category.id===currentCategoryId
+    );
+
+    let file =
+    category.files.find(
+        file=>file.id===id
+    );
+
+    window.open(file.data);
 }
 
 // ======================
