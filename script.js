@@ -3,13 +3,15 @@
 // ======================
 
 let categories =
-JSON.parse(localStorage.getItem("categories"))
+JSON.parse(
+    localStorage.getItem("categories")
+)
 || [];
 
 let currentCategoryId = null;
 
 // ======================
-// SAVE
+// SAVE DATA
 // ======================
 
 function saveData(){
@@ -145,7 +147,7 @@ function openCategory(id){
 }
 
 // ======================
-// BACK
+// BACK BUTTON
 // ======================
 
 document.getElementById(
@@ -200,8 +202,6 @@ document.getElementById(
             name:file.name,
 
             data:e.target.result,
-
-            type:file.type,
 
             favorite:false
         });
@@ -301,7 +301,18 @@ function openFile(id){
         file=>file.id===id
     );
 
-    window.open(file.data);
+    fetch(file.data)
+    .then(response=>response.blob())
+    .then(blob=>{
+
+        let blobURL =
+        URL.createObjectURL(blob);
+
+        window.open(
+            blobURL,
+            "_blank"
+        );
+    });
 }
 
 // ======================
