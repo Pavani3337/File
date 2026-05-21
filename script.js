@@ -105,11 +105,6 @@ function renderCategories(){
 
 function deleteCategory(id){
 
-    let confirmDelete =
-    confirm("Delete Category?");
-
-    if(!confirmDelete) return;
-
     categories =
     categories.filter(
         category=>category.id!==id
@@ -187,6 +182,9 @@ document.getElementById(
     let file =
     fileInput.files[0];
 
+    let fileURL =
+    URL.createObjectURL(file);
+
     let category =
     categories.find(
         category=>
@@ -198,6 +196,8 @@ document.getElementById(
         id:Date.now(),
 
         name:file.name,
+
+        url:fileURL,
 
         favorite:false
     });
@@ -246,8 +246,22 @@ function renderFiles(){
         ">
 
             <h3>
+
                 ${file.favorite ? "⭐":""}
-                📄 ${file.name}
+
+                <a
+                    href="${file.url}"
+                    target="_blank"
+                    style="
+                        color:white;
+                        text-decoration:none;
+                    "
+                >
+
+                    📄 ${file.name}
+
+                </a>
+
             </h3>
 
             <button
