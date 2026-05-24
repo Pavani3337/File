@@ -1,220 +1,23 @@
 // ======================
-// STORAGE
+// DATA
 // ======================
 
-let categories =
+let libraryFiles =
 JSON.parse(
-    localStorage.getItem("categories")
-)
-|| [];
-
-let currentCategoryId = null;
+localStorage.getItem("libraryFiles")
+) || [];
 
 // ======================
-// SAVE
+// SAVE DATA
 // ======================
 
 function saveData(){
 
-    localStorage.setItem(
-        "categories",
-        JSON.stringify(categories)
-    );
+localStorage.setItem(
+"libraryFiles",
+JSON.stringify(libraryFiles)
+);
 }
-
-// ======================
-// ADD CATEGORY
-// ======================
-
-document.getElementById(
-    "addCategoryBtn"
-).onclick = function(){
-
-    let input =
-    document.getElementById(
-        "categoryInput"
-    );
-
-    let name =
-    input.value.trim();
-
-    if(name==="") return;
-
-    categories.push({
-
-        id:Date.now(),
-
-        name:name,
-
-        files:[]
-    });
-
-    input.value="";
-
-    saveData();
-
-    renderCategories();
-};
-
-// ======================
-// RENDER CATEGORIES
-// ======================
-
-function renderCategories(){
-
-    let container =
-    document.getElementById(
-        "categoriesContainer"
-    );
-
-    container.innerHTML="";
-
-    categories.forEach(category=>{
-
-        container.innerHTML += `
-
-        <div class="card">
-
-            <h2>
-                📁 ${category.name}
-            </h2>
-
-            <p>
-                Files:
-                ${category.files.length}
-            </p>
-
-            <button
-                onclick="openCategory(${category.id})"
-            >
-                Open
-            </button>
-
-            <button
-                onclick="deleteCategory(${category.id})"
-            >
-                Delete
-            </button>
-
-        </div>
-        `;
-    });
-}
-
-// ======================
-// DELETE CATEGORY
-// ======================
-
-function deleteCategory(id){
-
-    categories =
-    categories.filter(
-        category=>category.id!==id
-    );
-
-    saveData();
-
-    renderCategories();
-}
-
-// ======================
-// OPEN CATEGORY
-// ======================
-
-function openCategory(id){
-
-    currentCategoryId = id;
-
-    let category =
-    categories.find(
-        category=>category.id===id
-    );
-
-    document.getElementById(
-        "homePage"
-    ).style.display="none";
-
-    document.getElementById(
-        "dashboardPage"
-    ).style.display="block";
-
-    document.getElementById(
-        "dashboardTitle"
-    ).innerText =
-    "📁 " + category.name;
-
-    renderFiles();
-}
-
-// ======================
-// BACK BUTTON
-// ======================
-
-document.getElementById(
-    "backBtn"
-).onclick = function(){
-
-    document.getElementById(
-        "dashboardPage"
-    ).style.display="none";
-
-    document.getElementById(
-        "homePage"
-    ).style.display="block";
-
-    renderCategories();
-};
-
-// ======================
-// UPLOAD FILE
-// ======================
-
-document.getElementById(
-    "uploadBtn"
-).onclick = function(){
-
-    let fileInput =
-    document.getElementById(
-        "fileInput"
-    );
-
-    if(fileInput.files.length===0)
-    return;
-
-    let file =
-    fileInput.files[0];
-
-    let reader =
-    new FileReader();
-
-    reader.onload = function(e){
-
-        let category =
-        categories.find(
-            category=>
-            category.id===currentCategoryId
-        );
-
-        category.files.push({
-
-            id:Date.now(),
-
-            name:file.name,
-
-            data:e.target.result,
-
-            favorite:false
-        });
-
-        saveData();
-
-        renderFiles();
-    };
-
-    reader.readAsDataURL(file);
-
-    fileInput.value="";
-};
 
 // ======================
 // RENDER FILES
@@ -222,143 +25,242 @@ document.getElementById(
 
 function renderFiles(){
 
-    let container =
-    document.getElementById(
-        "filesContainer"
-    );
+let container =
+document.getElementById(
+"fileContainer"
+);
 
-    container.innerHTML="";
+container.innerHTML = "";
 
-    let category =
-    categories.find(
-        category=>
-        category.id===currentCategoryId
-    );
+let search =
+document.getElementById(
+"searchInput"
+).value.toLowerCase();
 
-    let files =
-    [...category.files];
+for(let i=0;i<libraryFiles.length;i++){
 
-    files.sort((a,b)=>
-        b.favorite-a.favorite
-    );
+let file = libraryFiles[i];
 
-    files.forEach(file=>{
+if(
 
-        container.innerHTML += `
+file.name
+.toLowerCase()
+.includes(search)
 
-        <div class="
-            file
-            ${file.favorite ? "favorite":""}
-        ">
+=== false
 
-            <h3>
+){
 
-                ${file.favorite ? "⭐":""}
+continue;
+}
 
-                📄 ${file.name}
+container.innerHTML +=
 
-            </h3>
+"<div class='fileCard "
 
-            <button
-                onclick="downloadFile(${file.id})"
-            >
-                Download/Open
-            </button>
++ (
+file.favorite
+? "favorite"
+: ""
+)
 
-            <button
-                onclick="toggleFavorite(${file.id})"
-            >
++ "'>"
 
-                ${file.favorite ? "Unfavorite":"Favorite"}
++ "<h2>📄 "
++ file.name
++ "</h2>"
 
-            </button>
++ "<p>📘 Subject : "
++ file.subject
++ "</p>"
 
-            <button
-                onclick="deleteFile(${file.id})"
-            >
-                Delete
-            </button>
++ "<p>📁 Type : "
++ file.type
++ "</p>"
 
-        </div>
-        `;
-    });
++ (
+file.favorite
+? "<p>⭐ Favorite</p>"
+: ""
+)
+
++ "<button onclick='openFile("
++ i
++ ")'>Open</button>"
+
++ "<button onclick='downloadFile("
++ i
++ ")'>Download</button>"
+
++ "<button onclick='deleteFile("
++ i
++ ")'>Delete</button>"
+
++ "</div>";
+}
+}
+
+// ======================
+// UPLOAD FILE
+// ======================
+
+document.getElementById(
+"uploadBtn"
+).onclick = function(){
+
+let name =
+document.getElementById(
+"fileName"
+).value.trim();
+
+let subject =
+document.getElementById(
+"subject"
+).value;
+
+let fileInput =
+document.getElementById(
+"fileInput"
+);
+
+let favorite =
+document.getElementById(
+"favorite"
+).checked;
+
+let file =
+fileInput.files[0];
+
+if(
+
+name===""
+
+||
+
+!file
+
+){
+
+alert(
+"Enter File Details"
+);
+
+return;
+}
+
+let reader =
+new FileReader();
+
+reader.onload = function(e){
+
+let data =
+e.target.result;
+
+libraryFiles.push({
+
+name:name,
+
+subject:subject,
+
+type:file.type,
+
+favorite:favorite,
+
+data:data
+});
+
+saveData();
+
+renderFiles();
+
+document.getElementById(
+"fileName"
+).value = "";
+
+document.getElementById(
+"fileInput"
+).value = "";
+
+document.getElementById(
+"favorite"
+).checked = false;
+
+alert(
+"File Uploaded Successfully"
+);
+};
+
+reader.readAsDataURL(file);
+};
+
+// ======================
+// OPEN FILE
+// ======================
+
+function openFile(index){
+
+let file =
+libraryFiles[index];
+
+let newWindow =
+window.open();
+
+newWindow.document.write(
+
+"<iframe src='"
+
++ file.data
+
++ "' width='100%' height='100%'></iframe>"
+
+);
 }
 
 // ======================
 // DOWNLOAD FILE
 // ======================
 
-function downloadFile(id){
+function downloadFile(index){
 
-    let category =
-    categories.find(
-        category=>
-        category.id===currentCategoryId
-    );
+let file =
+libraryFiles[index];
 
-    let file =
-    category.files.find(
-        file=>file.id===id
-    );
+let a =
+document.createElement("a");
 
-    let link =
-    document.createElement("a");
+a.href = file.data;
 
-    link.href = file.data;
+a.download = file.name;
 
-    link.download = file.name;
-
-    link.click();
+a.click();
 }
 
 // ======================
 // DELETE FILE
 // ======================
 
-function deleteFile(id){
+function deleteFile(index){
 
-    let category =
-    categories.find(
-        category=>
-        category.id===currentCategoryId
-    );
+libraryFiles.splice(index,1);
 
-    category.files =
-    category.files.filter(
-        file=>file.id!==id
-    );
+saveData();
 
-    saveData();
-
-    renderFiles();
+renderFiles();
 }
 
 // ======================
-// FAVORITE FILE
+// SEARCH
 // ======================
 
-function toggleFavorite(id){
+document.getElementById(
+"searchInput"
+).onkeyup = function(){
 
-    let category =
-    categories.find(
-        category=>
-        category.id===currentCategoryId
-    );
-
-    let file =
-    category.files.find(
-        file=>file.id===id
-    );
-
-    file.favorite = !file.favorite;
-
-    saveData();
-
-    renderFiles();
-}
+renderFiles();
+};
 
 // ======================
 // START
 // ======================
 
-renderCategories();
+renderFiles();
